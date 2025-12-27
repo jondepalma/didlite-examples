@@ -1,10 +1,10 @@
-# didlite Integration Examples
+# didlite: Marketing Agent Examples 📢
 
-This repository demonstrates how to integrate `didlite` (Decentralized Identity for Agents) into major AI frameworks and applications. Each example showcases a different security pattern using W3C DID standards and JWS token signing.
+This repository demonstrates how to use `didlite` to secure autonomous marketing workflows. By giving each agent a **Cryptographic Identity**, we prevent "hallucinations" from hitting production and ensure a strict Chain of Custody for content.
 
 ## Overview
 
-**didlite** provides lightweight, cryptographic identity for autonomous AI agents without requiring centralized servers, databases, or blockchain infrastructure. These examples show how to implement secure agent communication across different frameworks.
+**didlite** provides lightweight, cryptographic identity for autonomous AI agents without requiring centralized servers, databases, or blockchain infrastructure. These examples show real-world marketing and content workflows where agent identity verification prevents unauthorized or malicious content from being published.
 
 ## Prerequisites
 
@@ -48,60 +48,63 @@ pip install -r requirements.txt
 
 ## Examples
 
-### Example 1: FastAPI Gatekeeper
+### Example 1: FastAPI CMS (The "Headless CMS")
 
-**Directory**: [01_fastapi_gatekeeper/](01_fastapi_gatekeeper/)
-**Concept**: The Gatekeeper - Protecting API endpoints without API keys
+**Directory**: [01_fastapi_cms/](01_fastapi_cms/)
+**Concept**: Cryptographically verified content publishing
 
-Demonstrates how to secure FastAPI endpoints using DID-based authentication instead of traditional API keys. The `verify_agent` dependency validates JWS tokens cryptographically.
+A "Headless CMS" API that only accepts blog posts signed by authorized Copywriter Agents. This prevents rogue posts and provides cryptographic proof of which agent wrote what content.
 
 **Run**:
 ```bash
-python 01_fastapi_gatekeeper/server.py
+python 01_fastapi_cms/cms_server.py
 ```
 
 **Key Features**:
-- FastAPI dependency injection for auth
-- Bearer token validation
-- Self-contained verification (no database lookups)
+- FastAPI dependency validates publisher signatures
+- Replaces API keys with cryptographic identity
+- Self-contained simulation with copywriter agent
+- Tracks verified author DID for each published article
 
 ---
 
-### Example 2: LangChain Secure Tool
+### Example 2: LangChain Brand Safety (The "Brand Guardian")
 
-**Directory**: [02_langchain_secure_tool/](02_langchain_secure_tool/)
-**Concept**: The Secure Tool - Tool execution requires cryptographic signatures
+**Directory**: [02_langchain_brand_safety/](02_langchain_brand_safety/)
+**Concept**: Brand Safety - Preventing unauthorized social media posts
 
-Shows how to create LangChain tools that require cryptographically signed parameters to prevent LLM hallucination of permissions.
+A LangChain tool that validates a cryptographic signature before publishing tweets. This prevents the LLM from hallucinating permissions or posting unauthorized content that could damage brand reputation.
 
 **Run**:
 ```bash
-python 02_langchain_secure_tool/main.py
+python 02_langchain_brand_safety/main.py
 ```
 
 **Key Features**:
-- Pre-authorization pattern
-- Signature verification before execution
-- Payload claim validation
+- Secure tool requiring signed content tokens
+- Pre-authorization pattern with brand identity
+- Payload integrity checks prevent content manipulation
+- Attack simulation shows security blocking malicious rewrites
 
 ---
 
-### Example 3: AutoGen Handshake
+### Example 3: AutoGen Editorial Workflow (The "Chain of Custody")
 
-**Directory**: [03_autogen_handshake/](03_autogen_handshake/)
-**Concept**: The Handshake - Multi-agent message signing and verification
+**Directory**: [03_autogen_editorial/](03_autogen_editorial/)
+**Concept**: Multi-agent workflow with identity verification
 
-Demonstrates secure communication between autonomous agents in a multi-agent system, with tamper detection.
+An Editor Agent that verifies the author of drafts before spending cycles reviewing them. This establishes a strict Chain of Custody for content, ensuring only known copywriters can submit for editorial review.
 
 **Run**:
 ```bash
-python 03_autogen_handshake/simulation.py
+python 03_autogen_editorial/workflow.py
 ```
 
 **Key Features**:
-- Agent-to-agent authentication
-- Message integrity verification
-- Attack simulation (message tampering)
+- Allow-list based authorization (only known copywriters accepted)
+- Three security scenarios: legitimate, imposter, and tampering
+- Demonstrates signature validation failures
+- Chain of custody enforcement
 
 ---
 
@@ -154,12 +157,12 @@ didlite-examples/
 ├── .gitignore                         # Excludes dev-design/
 ├── didlite-pkg/                       # Git submodule (v0.2.0)
 ├── dev-design/                        # Untracked context docs
-├── 01_fastapi_gatekeeper/
-│   └── server.py
-├── 02_langchain_secure_tool/
+├── 01_fastapi_cms/
+│   └── cms_server.py
+├── 02_langchain_brand_safety/
 │   └── main.py
-├── 03_autogen_handshake/
-│   └── simulation.py
+├── 03_autogen_editorial/
+│   └── workflow.py
 └── 04_secure_agent_comms/
     ├── main.py
     ├── agents.py
@@ -192,9 +195,10 @@ Application-layer nonce tracking prevents reuse of valid tokens (Example 4).
 
 This architecture is ideal for:
 
-- **Autonomous AI Agents**: Verifiable communication between AI systems
-- **IoT Devices**: Lightweight identity for edge devices
-- **Distributed Systems**: No central authority required
+- **Marketing Automation**: Prevent rogue AI agents from damaging brand reputation
+- **Content Management**: Cryptographic proof of authorship for all published content
+- **Social Media Management**: Brand safety controls for autonomous posting agents
+- **Editorial Workflows**: Chain of custody for content creation and review
 - **Agent Marketplaces**: Cryptographic proof of agent actions
 - **Secure Tool Execution**: Prevent LLM permission hallucination
 
