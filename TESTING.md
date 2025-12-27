@@ -25,11 +25,6 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e ./didlite-pkg
 ```
 
-**Note**: If you get a missing dependency error for `cryptography`, install it manually:
-```bash
-pip install cryptography
-```
-
 ### 4. Verify didlite Installation
 
 ```bash
@@ -139,13 +134,6 @@ curl http://localhost:8000/agents/bob/messages
 ```
 
 ## Troubleshooting
-
-### Issue: ModuleNotFoundError for 'cryptography'
-
-**Solution**:
-```bash
-pip install cryptography
-```
 
 ### Issue: ModuleNotFoundError for 'didlite'
 

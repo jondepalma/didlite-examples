@@ -88,16 +88,9 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install didlite as editable
 pip install -e ./didlite-pkg
 
-# Note: didlite has an undeclared dependency on cryptography
-# If you get "ModuleNotFoundError: No module named 'cryptography'", install it:
-pip install cryptography
-
 # Install all dependencies
 pip install -r requirements.txt
 ```
-
-### Known Issues
-- **Missing cryptography dependency**: The didlite package imports `cryptography` but doesn't declare it in `setup.py`. Install manually with `pip install cryptography` if needed.
 
 ### Running Examples
 Each example is self-contained and can be run directly:
