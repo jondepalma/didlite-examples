@@ -110,8 +110,8 @@ class AgentManager:
             Dictionary containing verification result
         """
         try:
-            # Verify the signature and extract payload
-            payload = verify_jws(token)
+            # Verify the signature and extract payload and header
+            header, payload = verify_jws(token)
 
             # Check nonce if enabled (application-layer replay protection)
             if self.nonce_enabled:
@@ -132,14 +132,7 @@ class AgentManager:
                         "error": "Replay attack detected! This nonce was already used."
                     }
 
-            # Extract sender DID from token header
-            import base64
-            import json
-            header_segment = token.split('.')[0]
-            padding_needed = (4 - len(header_segment) % 4) % 4
-            padded_header = header_segment + ('=' * padding_needed)
-            header_data = base64.urlsafe_b64decode(padded_header)
-            header = json.loads(header_data)
+            # Extract sender DID from token header (now directly available)
             sender_did = header.get('kid')
 
             # Record in recipient's history if recipient exists

@@ -1,6 +1,4 @@
 import didlite
-import json
-import base64
 
 # --- 1. Identities ---
 copywriter_id = didlite.AgentIdentity()
@@ -18,10 +16,9 @@ def wrap_draft(sender_id: didlite.AgentIdentity, draft_text: str) -> str:
 def review_draft(token: str) -> str:
     """Editor logic: Unwraps and verifies"""
     try:
-        payload = didlite.verify_jws(token)
+        header, payload = didlite.verify_jws(token)
 
-        # Extract sender DID from token header
-        header = json.loads(base64.urlsafe_b64decode(token.split('.')[0] + '=='))
+        # Extract sender DID from token header (now directly available)
         sender = header.get('kid')
 
         draft = payload.get("draft")

@@ -1,6 +1,6 @@
 # Testing Guide for didlite-examples
 
-This guide helps you validate the project setup and test Example 4 (Secure Agent Communications).
+This guide helps you validate the project setup and test all 8 examples.
 
 ## Initial Setup Validation
 
@@ -159,21 +159,105 @@ lsof -ti:8000 | xargs kill -9
 git submodule update --init --recursive
 ```
 
-## Next Steps
+## Testing All Examples
 
-Once Example 4 is working:
+### Example 1: FastAPI CMS
 
-1. **Build Example 1** (FastAPI Gatekeeper)
-   - Create `01_fastapi_gatekeeper/server.py`
-   - Follow the specification in `dev-design/DIDLITE-EXAMPLES.md`
+```bash
+source venv/bin/activate
+python 01_fastapi_cms/cms_server.py
+```
 
-2. **Build Example 2** (LangChain Secure Tool)
-   - Create `02_langchain_secure_tool/main.py`
-   - Install: `pip install langchain langchain-openai`
+Expected output:
+- Agent DID displayed
+- Article published successfully
+- CMS response with tier, rate limit, and handler info
 
-3. **Build Example 3** (AutoGen Handshake)
-   - Create `03_autogen_handshake/simulation.py`
-   - Install: `pip install pyautogen`
+### Example 2: LangChain Brand Safety
+
+```bash
+source venv/bin/activate
+python 02_langchain_brand_safety/main.py
+```
+
+Expected output:
+- Brand identity DID
+- Tweet published successfully
+- Attack simulation blocked with safety error
+
+### Example 3: AutoGen Editorial Workflow
+
+```bash
+source venv/bin/activate
+python 03_autogen_editorial/workflow.py
+```
+
+Expected output:
+- Copywriter and Editor DIDs
+- Round 1: Draft accepted
+- Round 2: Imposter access denied
+- Round 3: Tampering detected
+
+### Example 5: KeyStore Persistence
+
+```bash
+source venv/bin/activate
+python 05_keystore_persistence/demo.py
+```
+
+Expected output:
+- Scenario 1: MemoryKeyStore (identity changes on restart)
+- Scenario 2: EnvKeyStore (identity preserved)
+- Scenario 3: FileKeyStore (identity preserved with encryption)
+- Comparison table of all three backends
+
+### Example 6: Key Backup and Recovery
+
+```bash
+source venv/bin/activate
+python 06_key_backup/demo.py
+```
+
+Expected output:
+- Scenario 1: JWK export/import with disaster recovery
+- Scenario 2: PEM export/import (OpenSSL compatible)
+- Scenario 3: Public key sharing demonstration
+- Scenario 4: Cross-system migration
+- Format comparison table
+
+### Example 7: Raw Signature Verification
+
+```bash
+source venv/bin/activate
+python 07_raw_signatures/demo.py
+```
+
+Expected output:
+- Scenario 1: Raw binary data signing
+- Scenario 2: Tamper detection
+- Scenario 3: File integrity verification
+- Scenario 4: Custom binary protocol
+- JWS vs Raw comparison table
+
+### Example 8: Fast Routing
+
+Terminal 1 (Server):
+```bash
+source venv/bin/activate
+python 08_fast_routing/server.py
+```
+
+Terminal 2 (Demo):
+```bash
+source venv/bin/activate
+python 08_fast_routing/demo.py
+```
+
+Expected output:
+- Scenario 1: Free tier rate limiting (3 requests succeed, rest blocked)
+- Scenario 2: Request routing by tier
+- Scenario 3: Audit logging of all requests
+- Scenario 4: Performance comparison (~40-50x speedup)
 
 ## Success Criteria
 
@@ -181,10 +265,15 @@ You have successfully set up the project if:
 
 - ✅ didlite imports without errors
 - ✅ You can create an AgentIdentity and see a DID
-- ✅ Example 4 server starts on port 8000
-- ✅ The demo script runs and shows attack scenarios
-- ✅ API documentation is accessible at http://localhost:8000/docs
-- ✅ You can send and verify messages via the API
+- ✅ All 8 examples run without errors
+- ✅ Example 1: Article published successfully
+- ✅ Example 2: Tweet published and attack blocked
+- ✅ Example 3: All three rounds complete (accept, reject, tamper)
+- ✅ Example 4: Server starts and demo shows attack scenarios
+- ✅ Example 5: All three KeyStore backends demonstrate persistence
+- ✅ Example 6: Key export/import in both JWK and PEM formats
+- ✅ Example 7: Raw signatures and file integrity verification
+- ✅ Example 8: Rate limiting and performance benchmarks
 
 ## Additional Testing
 

@@ -4,8 +4,6 @@ from pydantic import BaseModel
 from typing import Annotated, List
 import didlite
 import time
-import base64
-import json
 
 app = FastAPI(title="Agentic CMS API")
 
@@ -24,10 +22,9 @@ async def verify_publisher(authorization: Annotated[str | None, Header()] = None
             raise HTTPException(status_code=401, detail="Invalid scheme")
 
         # VERIFY: Who signed this?
-        payload = didlite.verify_jws(token)
+        header, payload = didlite.verify_jws(token)
 
-        # Extract DID from token header
-        header = json.loads(base64.urlsafe_b64decode(token.split('.')[0] + '=='))
+        # Extract DID from token header (now directly available)
         payload['kid'] = header.get('kid')
 
         return payload
