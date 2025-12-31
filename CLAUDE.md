@@ -11,8 +11,7 @@ didlite-examples/
 ├── README.md
 ├── CLAUDE.md                       # This file
 ├── TESTING.md                      # Testing guide
-├── requirements.txt
-├── didlite-pkg/                    # Git submodule (private repo)
+├── requirements.txt                # Includes didlite from PyPI
 ├── 01_fastapi_cms/
 │   └── cms_server.py
 ├── 02_langchain_brand_safety/
@@ -39,10 +38,10 @@ didlite-examples/
 ```
 
 ### didlite Package Management
-- **Source**: Private GitHub repository at `git@github.com:jondepalma/didlite-pkg.git`
-- **Version**: v0.2.3 (main branch)
-- **Installation**: Added as git submodule, installed locally as editable package
-- **Strategy**: Single submodule supports all eight example applications (no duplication)
+- **Source**: PyPI (https://pypi.org/project/didlite/)
+- **Version**: v0.2.4+
+- **Installation**: Standard pip installation via requirements.txt
+- **Upgrade**: Run `pip install --upgrade didlite` to get latest version
 
 ## Examples
 
@@ -125,20 +124,15 @@ didlite-examples/
 
 ### Initial Setup
 ```bash
-# Clone with submodule
-git clone --recurse-submodules <repo-url>
-
-# Or if already cloned
-git submodule update --init --recursive
+# Clone repository
+git clone <repo-url>
+cd didlite-examples
 
 # Create and activate virtual environment (recommended)
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install didlite as editable
-pip install -e ./didlite-pkg
-
-# Install all dependencies
+# Install all dependencies (includes didlite from PyPI)
 pip install -r requirements.txt
 ```
 
@@ -156,7 +150,7 @@ python 08_fast_routing/server.py  # Server (then run demo.py in another terminal
 ```
 
 ## Dependencies
-- **didlite**: v0.2.3+ (installed from submodule)
+- **didlite**: v0.2.4+ (installed from PyPI)
 - **fastapi**: Web framework for Examples 1, 4, 8
 - **uvicorn**: ASGI server for FastAPI
 - **langchain**: LLM framework for Example 2
@@ -174,7 +168,7 @@ python 08_fast_routing/server.py  # Server (then run demo.py in another terminal
 ## Git Workflow
 - Main branch: `main`
 - Development branch: `dev`
-- didlite submodule tracks: `main` branch at v0.2.3
+- didlite package: Installed from PyPI (v0.2.4+)
 - dev-design folder: Untracked (for context management)
 
 ## Testing Strategy

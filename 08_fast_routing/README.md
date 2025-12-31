@@ -105,7 +105,7 @@ Request Flow (Optimized):
 python 08_fast_routing/server.py
 ```
 
-The server will start on `http://127.0.0.1:8000`
+The server will start on `http://0.0.0.0:8000` (accessible from external IPs)
 
 ### 2. Run the Demo (in another terminal)
 
@@ -121,7 +121,7 @@ The demo will:
 
 ### 3. Explore the API
 
-Visit the interactive API docs at: `http://127.0.0.1:8000/docs`
+Visit the interactive API docs at: `http://localhost:8000/docs` (or use your server's IP address)
 
 ## API Endpoints
 
@@ -167,14 +167,14 @@ free_agent → "Best Effort Queue"
 # Routing decision made BEFORE expensive verification
 ```
 
-### Scenario 3: Audit Logging
+### Scenario 3: Audit Logging (Structured JSON)
 
-```python
-# ALL requests logged (even invalid ones)
-[2025-01-30T10:15:23Z] REQUEST | RECEIVED | did:key:z6Mk... | Article: Breaking News
-[2025-01-30T10:15:23Z] VERIFY | SUCCESS | did:key:z6Mk... | Signature valid
-[2025-01-30T10:15:24Z] EXTRACT_DID | FAILED | unknown | Invalid token format
-[2025-01-30T10:15:25Z] RATE_LIMIT | BLOCKED | did:key:z6Mk... | Tier: free
+```json
+// ALL requests logged in structured JSON format (even invalid ones)
+{"timestamp": "2025-01-30T10:15:23Z", "event_type": "REQUEST", "status": "RECEIVED", "endpoint": "/publish", "did": "did:key:z6Mk...", "message": "Article: Breaking News"}
+{"timestamp": "2025-01-30T10:15:23Z", "event_type": "VERIFY", "status": "SUCCESS", "endpoint": "/publish", "did": "did:key:z6Mk...", "message": "Signature valid"}
+{"timestamp": "2025-01-30T10:15:24Z", "event_type": "EXTRACT_DID", "status": "FAILED", "endpoint": "/publish", "did": "unknown", "message": "Invalid token format"}
+{"timestamp": "2025-01-30T10:15:25Z", "event_type": "RATE_LIMIT", "status": "BLOCKED", "endpoint": "/publish", "did": "did:key:z6Mk...", "message": "Tier: free"}
 ```
 
 ## Educational Disclaimer
@@ -183,15 +183,16 @@ free_agent → "Best Effort Queue"
 
 Production implementations should use:
 - **Distributed rate limiting**: Redis, Memcached (not in-memory)
-- **Structured logging**: JSON logs, ELK stack, CloudWatch (not text files)
+- **Structured logging**: Ship JSON logs to ELK stack, CloudWatch, Datadog
 - **Database-backed audit**: PostgreSQL, MongoDB (not file-based)
 - **Proper DDoS protection**: WAF, CDN, infrastructure-level
 - **Monitoring & alerting**: Prometheus, Grafana, PagerDuty
 
 This demo uses:
 - In-memory rate limiting (resets on restart)
-- Simple file-based logging (not production-ready)
+- **Structured JSON logging** to local file (production: ship to log aggregator)
 - Mock agent tiers (should be database-backed)
+- **HTTP 429 status codes** for rate limiting (industry standard)
 
 ## Key Takeaways
 
@@ -203,15 +204,18 @@ This demo uses:
    - Rate-limited requests: ~50% CPU savings
    - Invalid format requests: ~100% crypto savings
 
-3. **Security**: Audit logging of all attempts
+3. **Security**: Structured JSON audit logging
    - Track abuse patterns
    - Monitor attack attempts
    - Log even before verification
+   - Easy to parse and analyze
 
-4. **Scalability**: Tier-based routing
+4. **Scalability**: Tier-based routing and proper HTTP status codes
    - Premium agents get priority
    - Load distribution
    - Fair resource allocation
+   - **HTTP 429** (Too Many Requests) for rate limiting
+   - **HTTP 403** (Forbidden) for invalid signatures
 
 ## Production Considerations
 
@@ -228,17 +232,29 @@ r.incr(f"rate_limit:{did}", ex=60)
 
 ### Audit Logging
 ```python
-# Demo (file-based)
+# Demo (structured JSON to file)
+import json
+log_entry = {
+    "timestamp": datetime.utcnow().isoformat(),
+    "event_type": event_type,
+    "status": status,
+    "endpoint": endpoint,
+    "did": did,
+    "message": message
+}
 with open("audit.log", "a") as f:
-    f.write(log_entry)
+    f.write(json.dumps(log_entry) + "\n")
 
-# Production (structured)
+# Production (ship to log aggregator)
 import logging
+import json_logging
+logger = logging.getLogger()
 logger.info("request", extra={
     "did": did,
     "endpoint": endpoint,
     "status": status
 })
+# Ship to: ELK, CloudWatch, Datadog, Splunk, etc.
 ```
 
 ### Request Routing
@@ -255,7 +271,7 @@ elif tier == "standard":
 
 ## See Also
 
-- [didlite CHANGELOG](../didlite-pkg/CHANGELOG.md) - extract_signer_did() details
+- [didlite on PyPI](https://pypi.org/project/didlite/) - extract_signer_did() introduced in v0.2.3
 - [Example 1](../01_fastapi_cms/) - Basic FastAPI authentication
 - [Example 4](../04_secure_agent_comms/) - Full agent communication system
 

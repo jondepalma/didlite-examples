@@ -33,6 +33,7 @@ import time
 from datetime import datetime
 from collections import defaultdict
 import os
+import json
 
 app = FastAPI(title="Fast Routing API - extract_signer_did() Demo")
 
@@ -52,17 +53,28 @@ audit_log_file = "audit.log"
 # --- Helper: Audit Logging ---
 def audit_log(event_type: str, did: str, endpoint: str, status: str, message: str = ""):
     """
-    Log all requests for security monitoring.
+    Log all requests for security monitoring using structured JSON format.
     Uses extract_signer_did() to log even BEFORE verification.
 
-    Production: Use structured logging (JSON) to ELK, CloudWatch, etc.
+    Production: Send to ELK, CloudWatch, Datadog, etc.
     """
     timestamp = datetime.utcnow().isoformat()
-    log_entry = f"[{timestamp}] {event_type} | {status} | {endpoint} | {did[:20]}... | {message}\n"
 
+    # Structured JSON log entry
+    log_entry = {
+        "timestamp": timestamp,
+        "event_type": event_type,
+        "status": status,
+        "endpoint": endpoint,
+        "did": did,
+        "message": message
+    }
+
+    # Write as JSON (one entry per line for easy parsing)
     with open(audit_log_file, "a") as f:
-        f.write(log_entry)
+        f.write(json.dumps(log_entry) + "\n")
 
+    # Console output (human-readable)
     print(f"📋 AUDIT: {event_type} | {status} | {did[:20]}...")
 
 # --- Helper: Rate Limiting ---
@@ -218,14 +230,26 @@ async def set_agent_tier(did: str, tier: str):
 
 @app.get("/admin/audit-log")
 async def get_audit_log(limit: int = 50):
-    """Get recent audit log entries"""
+    """Get recent audit log entries (structured JSON format)"""
     if not os.path.exists(audit_log_file):
-        return {"entries": []}
+        return {"entries": [], "total": 0}
 
     with open(audit_log_file, "r") as f:
         lines = f.readlines()
 
-    return {"entries": lines[-limit:], "total": len(lines)}
+    # Parse JSON entries
+    entries = []
+    for line in lines:
+        try:
+            entries.append(json.loads(line.strip()))
+        except json.JSONDecodeError:
+            # Handle any malformed entries gracefully
+            continue
+
+    # Return most recent entries
+    recent_entries = entries[-limit:] if limit > 0 else entries
+
+    return {"entries": recent_entries, "total": len(entries)}
 
 @app.get("/admin/rate-limits")
 async def get_rate_limits():
@@ -289,4 +313,4 @@ if __name__ == "__main__":
     print("   python 08_fast_routing/demo.py")
     print("\n" + "=" * 70 + "\n")
 
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

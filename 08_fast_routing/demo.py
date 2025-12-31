@@ -169,11 +169,18 @@ def main():
         publish_article(free_token, f"Spam {i}", "Spam content")
     print("   3-6. Rate limited requests: ❌ (all logged)")
 
-    # Get audit log
-    print("\n▶ Recent Audit Log Entries:")
+    # Get audit log (now in JSON format)
+    print("\n▶ Recent Audit Log Entries (Structured JSON):")
     log_data = get_audit_log(limit=10)
     for entry in log_data["entries"][-10:]:
-        print(f"   {entry.strip()}")
+        # Pretty print JSON log entry
+        timestamp = entry.get("timestamp", "")
+        event = entry.get("event_type", "")
+        status = entry.get("status", "")
+        endpoint = entry.get("endpoint", "")
+        did = entry.get("did", "unknown")[:20]
+        message = entry.get("message", "")
+        print(f"   [{timestamp}] {event} | {status} | {endpoint} | {did}... | {message}")
 
     print("\n💡 Security Benefit:")
     print("   • ALL requests logged (even before verification)")

@@ -1,6 +1,6 @@
 # Secure Agent Communication System
 
-A FastAPI-based demonstration of cryptographically secure communication between AI agents using [didlite](https://github.com/jondepalma/didlite-pkg) for decentralized identity and message signing.
+A FastAPI-based demonstration of cryptographically secure communication between AI agents using [didlite](https://pypi.org/project/didlite/) for decentralized identity and message signing.
 
 ## Overview
 
@@ -103,13 +103,12 @@ The token header includes the sender's DID in the `kid` field, enabling self-con
 
 - Python 3.8+
 - Virtual environment (venv)
-- Git with submodule support
 
 ### Setup
 
-1. Clone the repository and initialize submodules:
+1. Navigate to the project root:
 ```bash
-cd /home/pi/dev-projects/secure-agent-comms
+cd /home/pi/dev-projects/didlite-examples
 ```
 
 2. Activate the virtual environment:
@@ -117,14 +116,16 @@ cd /home/pi/dev-projects/secure-agent-comms
 source venv/bin/activate
 ```
 
-3. Verify didlite is installed:
+3. Install all dependencies (if not already done):
 ```bash
-pip list | grep didlite
+pip install -r requirements.txt
 ```
 
-4. Install additional dependencies (already done):
+This installs didlite from PyPI along with all required packages.
+
+4. Verify didlite is installed:
 ```bash
-pip install fastapi uvicorn pydantic
+pip list | grep didlite
 ```
 
 ## Running the Application
@@ -431,20 +432,21 @@ secure-agent-comms/
 ├── agents.py            # Agent management and identity
 ├── models.py            # Pydantic data models
 ├── README.md            # This file
-├── requirements.txt     # Python dependencies
-├── venv/                # Virtual environment
-└── didlite-pkg/         # Git submodule (didlite library)
+├── demo.py              # Interactive demo script
+├── test_api.sh          # Shell script for API testing
+└── nonce_tracker.py     # Replay protection implementation
 ```
+
+Note: didlite is installed from PyPI via the project's requirements.txt
 
 ### Running Tests
 
 ```bash
-# Run didlite tests
-cd didlite-pkg
-pytest -v
-
 # Test the API manually using the interactive docs
 # Visit http://localhost:8000/docs
+
+# Or run the automated demo script
+python demo.py --verbose
 ```
 
 ### Adding New Agents
@@ -480,7 +482,7 @@ This architecture is ideal for:
 
 ## References
 
-- [didlite Library](https://github.com/jondepalma/didlite-pkg)
+- [didlite on PyPI](https://pypi.org/project/didlite/)
 - [W3C DID Specification](https://www.w3.org/TR/did-core/)
 - [DID:Key Method Specification](https://w3c-ccg.github.io/did-method-key/)
 - [JWS Specification (RFC 7515)](https://tools.ietf.org/html/rfc7515)

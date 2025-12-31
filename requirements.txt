@@ -1,6 +1,5 @@
-# didlite - Install from local submodule as editable package
-# Run: pip install -e ./didlite-pkg
-# didlite>=0.2.0
+# didlite - Decentralized Identity for Agents
+didlite>=0.2.4
 
 # Example 1: FastAPI Gatekeeper
 fastapi>=0.127.0

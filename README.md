@@ -9,7 +9,6 @@ This repository demonstrates how to use `didlite` to secure autonomous marketing
 ## Prerequisites
 
 - Python 3.8+
-- Git with submodule support
 - Virtual environment recommended
 
 ## Installation
@@ -17,14 +16,8 @@ This repository demonstrates how to use `didlite` to secure autonomous marketing
 ### 1. Clone the Repository
 
 ```bash
-git clone --recurse-submodules <repo-url>
+git clone <repo-url>
 cd didlite-examples
-```
-
-Or if already cloned:
-
-```bash
-git submodule update --init --recursive
 ```
 
 ### 2. Set Up Virtual Environment (Recommended)
@@ -34,17 +27,13 @@ python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Install didlite from Submodule
-
-```bash
-pip install -e ./didlite-pkg
-```
-
-### 4. Install All Dependencies
+### 3. Install All Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
+
+This will install `didlite` v0.2.4+ from PyPI along with all other required packages.
 
 ## Examples
 
@@ -257,9 +246,8 @@ didlite-examples/
 ├── README.md                          # This file
 ├── CLAUDE.md                          # Development guide
 ├── TESTING.md                         # Testing guide for all examples
-├── requirements.txt                   # All dependencies
+├── requirements.txt                   # All dependencies (includes didlite from PyPI)
 ├── .gitignore                         # Excludes dev-design/
-├── didlite-pkg/                       # Git submodule (v0.2.3)
 ├── dev-design/                        # Untracked context docs
 ├── 01_fastapi_cms/
 │   ├── cms_server.py
@@ -392,26 +380,21 @@ These examples are for **educational and demonstration purposes**. For productio
 ## Troubleshooting
 
 ### didlite not found
-Make sure you installed from the submodule:
-```bash
-pip install -e ./didlite-pkg
-```
-
-### Import errors
-Ensure all dependencies are installed:
+Make sure you installed all dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Submodule not initialized
-Initialize the submodule:
+### Import errors
+Ensure all dependencies are installed and your virtual environment is activated:
 ```bash
-git submodule update --init --recursive
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 ## References
 
-- [didlite Repository](https://github.com/jondepalma/didlite-pkg) (private)
+- [didlite on PyPI](https://pypi.org/project/didlite/)
 - [W3C DID Specification](https://www.w3.org/TR/did-core/)
 - [DID:Key Method](https://w3c-ccg.github.io/did-method-key/)
 - [JWS Specification (RFC 7515)](https://tools.ietf.org/html/rfc7515)
