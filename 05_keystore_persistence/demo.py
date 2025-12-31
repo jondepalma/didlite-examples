@@ -119,7 +119,7 @@ def scenario_2_env():
     # Verify old token with restored identity
     print("\n▶ Verifying Token: Can we verify the token from before restart?")
     try:
-        payload = verify_jws(token1)
+        _, payload = verify_jws(token1)
         print(f"   ✅ Token verified successfully!")
         print(f"   Payload: {payload}")
     except Exception as e:
@@ -188,7 +188,7 @@ def scenario_3_file():
     # Verify old token with restored identity
     print("\n▶ Verifying Token: Can we verify the token from before reboot?")
     try:
-        payload = verify_jws(token1)
+        _, payload = verify_jws(token1)
         print(f"   ✅ Token verified successfully!")
         print(f"   Payload: {payload}")
     except Exception as e:

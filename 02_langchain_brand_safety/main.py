@@ -1,8 +1,6 @@
 import os
 from langchain.tools import tool
 import didlite
-import base64
-import json
 
 if "OPENAI_API_KEY" not in os.environ:
     os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-demo-purposes"
@@ -19,14 +17,13 @@ def publish_tweet(content: str, signed_token: str) -> str:
     """
     try:
         # VERIFY: Did the Brand Identity actually sign this text?
-        payload = didlite.verify_jws(signed_token)
+        header, payload = didlite.verify_jws(signed_token)
 
         # CHECK: Integrity Check
         if payload.get("content") != content:
             return "❌ SAFETY BLOCK: Token content does not match tweet text."
 
-        # Extract signer DID from token header
-        header = json.loads(base64.urlsafe_b64decode(signed_token.split('.')[0] + '=='))
+        # Extract signer DID from token header (now directly available)
         signer = header.get('kid')
 
         return f"✅ TWEET LIVE: '{content}' (Authorized by {signer[:15]}...)"

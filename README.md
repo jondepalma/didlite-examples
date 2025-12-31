@@ -207,6 +207,34 @@ python 07_raw_signatures/demo.py
 
 ---
 
+### Example 8: Fast Routing with extract_signer_did() (The "Performance Optimizer")
+
+**Directory**: [08_fast_routing/](08_fast_routing/)
+**Concept**: Performance optimization using fast DID extraction without full signature verification
+
+Demonstrates the new `extract_signer_did()` function (v0.2.3) which extracts the signer's DID ~2x faster than full verification, enabling efficient rate limiting, request routing, and audit logging.
+
+**Run**:
+```bash
+# Terminal 1: Start server
+python 08_fast_routing/server.py
+
+# Terminal 2: Run demo
+python 08_fast_routing/demo.py
+```
+
+**Key Features**:
+- Rate limiting by agent tier (free/standard/premium)
+- Request routing before signature verification
+- Comprehensive audit logging (all requests)
+- Performance benchmarking (~50% CPU savings on rejected requests)
+- Tier-based request handling
+
+**Documentation**:
+- [Full README](08_fast_routing/README.md)
+
+---
+
 ## Key Concepts
 
 ### Identity is Local
@@ -218,7 +246,9 @@ The DID format `did:key:z6Mk...` contains the public key encoded with Multibase/
 ### JWS (JSON Web Signatures)
 Standard transport envelope for signed messages:
 - `didlite.create_jws(agent, payload)` - Sign a message
-- `didlite.verify_jws(token)` - Verify signature and extract payload
+- `header, payload = didlite.verify_jws(token)` - Verify signature and extract header and payload
+
+**New in v0.2.3**: `verify_jws()` now returns both header and payload as a tuple, eliminating the need for manual base64 header parsing. Access the signer's DID directly with `header['kid']`, timestamp with `header['iat']`, and algorithm with `header['alg']`.
 
 ## Project Structure
 
@@ -226,9 +256,10 @@ Standard transport envelope for signed messages:
 didlite-examples/
 ├── README.md                          # This file
 ├── CLAUDE.md                          # Development guide
+├── TESTING.md                         # Testing guide for all examples
 ├── requirements.txt                   # All dependencies
 ├── .gitignore                         # Excludes dev-design/
-├── didlite-pkg/                       # Git submodule (v0.2.1)
+├── didlite-pkg/                       # Git submodule (v0.2.3)
 ├── dev-design/                        # Untracked context docs
 ├── 01_fastapi_cms/
 │   ├── cms_server.py
@@ -254,7 +285,11 @@ didlite-examples/
 ├── 06_key_backup/
 │   ├── demo.py
 │   └── README.md
-└── 07_raw_signatures/
+├── 07_raw_signatures/
+│   ├── demo.py
+│   └── README.md
+└── 08_fast_routing/
+    ├── server.py
     ├── demo.py
     └── README.md
 ```
@@ -285,6 +320,9 @@ Key export/import in standard formats (JWK, PEM) enables backup and recovery (Ex
 ### 8. Custom Protocols
 Raw signature operations enable minimal-overhead signing for IoT and embedded systems (Example 7).
 
+### 9. Performance Optimization
+Fast DID extraction (`extract_signer_did()`) enables efficient rate limiting, routing, and audit logging before expensive signature verification, saving ~50% CPU on rejected requests (Example 8).
+
 ## Use Cases
 
 This architecture is ideal for:
@@ -314,11 +352,19 @@ This architecture is ideal for:
 - **File Integrity**: Detect tampering in data archives
 - **Custom Protocols**: Binary message signing for embedded systems
 
+### High-Performance APIs (Example 8)
+- **Rate Limiting**: Enforce quotas by agent identity before verification
+- **Request Routing**: Route to tier-appropriate handlers efficiently
+- **DDoS Protection**: Block bad actors before expensive crypto operations
+- **Audit Logging**: Track all requests for security monitoring
+- **Cost Optimization**: Save CPU on rate-limited requests (~50% savings)
+
 ## didlite vs. Application Layer
 
 **didlite provides**:
 - ✅ DID generation and management
 - ✅ JWS token signing and verification
+- ✅ Fast DID extraction (extract_signer_did) - v0.2.3+
 - ✅ Raw signature operations (binary data)
 - ✅ Cryptographic identity binding
 - ✅ KeyStore backends (Memory, Environment, File)

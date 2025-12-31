@@ -105,7 +105,7 @@ def scenario_1_jwk_roundtrip():
     # Step 7: Verify old token with restored identity
     print("\n▶ Step 6: Verifying old token with restored identity...")
     try:
-        payload = verify_jws(token_before)
+        _, payload = verify_jws(token_before)
         print(f"   ✅ Token verified successfully!")
         print(f"   Payload: {payload}")
     except Exception as e:
@@ -265,7 +265,7 @@ def scenario_3_public_key_sharing():
     # Step 6: Verify the token (simulating a verifier with only public key)
     print("\n▶ Step 6: Verifier uses public key to verify token...")
     try:
-        payload = verify_jws(token)
+        _, payload = verify_jws(token)
         print(f"   ✅ Token verified! Payload: {payload}")
         print(f"   Verifier only needs the DID (public key) - no private key")
     except Exception as e:
