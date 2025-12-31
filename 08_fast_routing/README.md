@@ -105,7 +105,7 @@ Request Flow (Optimized):
 python 08_fast_routing/server.py
 ```
 
-The server will start on `http://127.0.0.1:8000`
+The server will start on `http://0.0.0.0:8000` (accessible from external IPs)
 
 ### 2. Run the Demo (in another terminal)
 
@@ -121,7 +121,7 @@ The demo will:
 
 ### 3. Explore the API
 
-Visit the interactive API docs at: `http://127.0.0.1:8000/docs`
+Visit the interactive API docs at: `http://localhost:8000/docs` (or use your server's IP address)
 
 ## API Endpoints
 
