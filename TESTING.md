@@ -4,28 +4,22 @@ This guide helps you validate the project setup and test all 8 examples.
 
 ## Initial Setup Validation
 
-### 1. Verify Submodule
-
-```bash
-# Check submodule is initialized
-ls -la didlite-pkg/
-# Should show didlite package contents
-```
-
-### 2. Create and Activate Virtual Environment
+### 1. Create and Activate Virtual Environment
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Install didlite from Submodule
+### 2. Install All Dependencies
 
 ```bash
-pip install -e ./didlite-pkg
+pip install -r requirements.txt
 ```
 
-### 4. Verify didlite Installation
+This will install `didlite` v0.2.4+ from PyPI along with all required packages for the examples.
+
+### 3. Verify didlite Installation
 
 ```bash
 python -c "import didlite; agent = didlite.AgentIdentity(); print('Success! Agent DID:', agent.did)"
@@ -34,12 +28,6 @@ python -c "import didlite; agent = didlite.AgentIdentity(); print('Success! Agen
 Expected output:
 ```
 Success! Agent DID: did:key:z6Mk...
-```
-
-### 5. Install Example Dependencies
-
-```bash
-pip install fastapi uvicorn pydantic
 ```
 
 ## Testing Example 4: Secure Agent Communications
@@ -139,7 +127,11 @@ curl http://localhost:8000/agents/bob/messages
 
 **Solution**:
 ```bash
-pip install -e ./didlite-pkg
+# Make sure virtual environment is activated
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install all dependencies
+pip install -r requirements.txt
 ```
 
 ### Issue: Port 8000 already in use
@@ -150,13 +142,6 @@ pip install -e ./didlite-pkg
 lsof -ti:8000 | xargs kill -9
 
 # Or modify main.py to use a different port
-```
-
-### Issue: Submodule is empty
-
-**Solution**:
-```bash
-git submodule update --init --recursive
 ```
 
 ## Testing All Examples
