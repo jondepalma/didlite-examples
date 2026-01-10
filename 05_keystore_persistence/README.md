@@ -126,8 +126,8 @@ Some scenarios benefit from ephemeral identities:
 ## Related Examples
 
 - **Example 6:** Key backup and recovery (JWK/PEM export)
-- **Example 4:** Secure agent communications (uses deterministic seeds)
-- **Example 9:** IoT fleet management (FileKeyStore at scale)
+- **Example 4:** Secure agent communications (uses persistent identities)
+- **Example 8:** Fast routing with identity-based rate limiting
 
 ## Files Created
 

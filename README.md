@@ -33,7 +33,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-This will install `didlite` v0.2.4+ from PyPI along with all other required packages.
+This will install `didlite` v0.2.5+ from PyPI along with all other required packages.
 
 ## Examples
 
