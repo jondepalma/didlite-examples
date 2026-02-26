@@ -1,5 +1,5 @@
 # didlite - Decentralized Identity for Agents
-didlite>=0.2.5
+didlite>=0.2.6
 
 # Example 1: FastAPI Gatekeeper
 fastapi>=0.127.0

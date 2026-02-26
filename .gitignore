@@ -149,3 +149,6 @@ Thumbs.db
 # Project specific
 dev-design/
 nonces.json
+
+# Claude Code settings
+.claude/
