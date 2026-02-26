@@ -39,7 +39,7 @@ didlite-examples/
 
 ### didlite Package Management
 - **Source**: PyPI (https://pypi.org/project/didlite/)
-- **Version**: v0.2.5+
+- **Version**: v0.2.6+
 - **Installation**: Standard pip installation via requirements.txt
 - **Upgrade**: Run `pip install --upgrade didlite` to get latest version
 
@@ -150,7 +150,7 @@ python 08_fast_routing/server.py  # Server (then run demo.py in another terminal
 ```
 
 ## Dependencies
-- **didlite**: v0.2.5+ (installed from PyPI)
+- **didlite**: v0.2.6+ (installed from PyPI)
 - **fastapi**: Web framework for Examples 1, 4, 8
 - **uvicorn**: ASGI server for FastAPI
 - **langchain**: LLM framework for Example 2
@@ -168,7 +168,7 @@ python 08_fast_routing/server.py  # Server (then run demo.py in another terminal
 ## Git Workflow
 - Main branch: `main`
 - Development branch: `dev`
-- didlite package: Installed from PyPI (v0.2.5+)
+- didlite package: Installed from PyPI (v0.2.6+)
 - dev-design folder: Untracked (for context management)
 
 ## Testing Strategy
